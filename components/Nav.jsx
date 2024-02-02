@@ -2,20 +2,20 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState, useEffect } from 'react'
-import {signIn, signOut, useSession, getProvider} from 'next-auth/react'
+import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 
 const Nav = () => {
 
-  const isUserLoggedIn = true
-  const [provider, setProviders] = useState(null)
+  const {data:session} = useSession()
+  const [providers, setProviders] = useState(null)
   const [toggleDropdown, setToggleDropdown] = useState(false)
 
   useEffect(() => {
-    const setProviders = async () => {
-      const response = await getProvider()
+    const setUpProviders = async () => {
+      const response = await getProviders()
       setProviders(response)
     } 
-    setProviders()
+    setUpProviders()
   },[])
 
   return (
@@ -31,7 +31,7 @@ const Nav = () => {
         <p className='logo_text'>Promptopia</p>    
       </Link>
       <div className='sm:flex hidden'>
-          {isUserLoggedIn? (
+          {session?.user ? (
           <div className='gap-3 flex md:gap-5'>
 
 
@@ -70,7 +70,7 @@ const Nav = () => {
           )}
       </div>
       <div className='sm:hidden flex relative'>
-          {isUserLoggedIn? (
+          {session?.user? (
             <div className='flex'>
               <Image 
                 src='assets/images/logo.svg'
@@ -124,6 +124,7 @@ const Nav = () => {
                 ))}
             </>
           )}
+          {window.alert(providers)}
       </div>
     </nav>
   )
