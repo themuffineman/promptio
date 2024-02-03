@@ -7,12 +7,14 @@ import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 const Nav = () => {
 
   const {data:session} = useSession()
+
   const [providers, setProviders] = useState(null)
+  
   const [toggleDropdown, setToggleDropdown] = useState(false)
 
   useEffect(() => {
     const setUpProviders = async () => {
-      const response = await getProviders()
+      const response = await getProviders();
       setProviders(response)
     } 
     setUpProviders()
@@ -46,7 +48,7 @@ const Nav = () => {
 
             <Link href='/Profile'>
               <Image 
-                src='assets/images/logo.svg'
+                src={session?.user.image}
                 alt='profile'
                 className='rounded-full'
                 width={37}
@@ -73,7 +75,7 @@ const Nav = () => {
           {session?.user? (
             <div className='flex'>
               <Image 
-                src='assets/images/logo.svg'
+                src={session?.user.image}
                 alt='profile'
                 className='rounded-full'
                 width={37}
@@ -110,7 +112,7 @@ const Nav = () => {
                 </button>
               </div>)}    
             </div>
-          ): (
+          ):(
             <>
                 {providers && Object.values(providers).map((provider)=>(
                   <button
@@ -124,7 +126,6 @@ const Nav = () => {
                 ))}
             </>
           )}
-          {window.alert(providers)}
       </div>
     </nav>
   )
